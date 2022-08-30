@@ -33,11 +33,11 @@ namespace HotelListing.API.Core.Repository
         public async Task<TResult> AddAsync<TSource, TResult>(TSource source)
         {
             var entity = _mapper.Map<T>(source);
-            
+
             await _context.AddAsync(entity);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<TResult>(entity); 
+            return _mapper.Map<TResult>(entity);
         }
 
         public async Task DeleteAsync(int id)
@@ -92,9 +92,8 @@ namespace HotelListing.API.Core.Repository
         public async Task<T> GetAsync(int? id)
         {
             if (id is null)
-            {
                 return null;
-            }
+
 
             return await _context.Set<T>().FindAsync(id);
         }
@@ -119,16 +118,12 @@ namespace HotelListing.API.Core.Repository
         public async Task UpdateAsync<TSource>(int id, TSource source) where TSource : IBaseDto
         {
             if (id != source.Id)
-            {
                 throw new BadRequestException("Invalid Id used in request");
-            }
 
             var entity = await GetAsync(id);
 
-            if(entity == null)
-            {
+            if (entity == null)
                 throw new NotFoundException(typeof(T).Name, id);
-            }
 
             _mapper.Map(source, entity);
             _context.Update(entity);

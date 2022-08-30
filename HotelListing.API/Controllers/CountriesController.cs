@@ -56,19 +56,6 @@ namespace HotelListing.API.Controllers
         }
 
 
-        // GET: api/Countries/5
-        [HttpGet("{id}")]
-        [Route("getCountryTest")]
-        public async Task<IActionResult> GetCountryTest(int id)
-        {
-            var country = await _countriesRepository.GetDetails(id);
-
-            if (country == null)
-                throw new NotFoundException(nameof(GetCountryTest), id);
-
-            return Ok(country);
-        }
-
         // PUT: api/Countries/5
         [HttpPut("{id}")]
         [Authorize]
