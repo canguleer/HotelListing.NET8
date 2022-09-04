@@ -63,9 +63,6 @@ namespace HotelListing.API.Controllers
         {
             try
             {
-                if (id != updateCountryDto.Id)
-                    return BadRequest();
-                
                 await _countriesRepository.UpdateAsync(id, updateCountryDto);
             }
             catch (DbUpdateConcurrencyException)
@@ -86,7 +83,7 @@ namespace HotelListing.API.Controllers
         // POST: api/Countries
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<CountryDto>> PostCountry(CreateCountryDto createCountryDto)
+        public async Task<IActionResult> PostCountry(CreateCountryDto createCountryDto)
         {
             var country = await _countriesRepository.AddAsync<CreateCountryDto, GetCountryDto>(createCountryDto);
             return CreatedAtAction(nameof(GetCountry), new { id = country.Id }, country);
@@ -95,13 +92,17 @@ namespace HotelListing.API.Controllers
         // DELETE: api/Countries/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> DeleteCountry(int id)
+        public async Task<ActionResult<CountryDto>> DeleteCountry(int id)
         {
+            var county = await _countriesRepository.GetAsync(id);
+            if (county == null)
+                return NotFound();
+
             await _countriesRepository.DeleteAsync(id);
             return NoContent();
         }
 
-        private async Task<bool> CountryExists(int id)
+        public async Task<bool> CountryExists(int id)
         {
             return await _countriesRepository.Exists(id);
         }

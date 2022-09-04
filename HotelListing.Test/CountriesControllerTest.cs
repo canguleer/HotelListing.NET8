@@ -32,7 +32,7 @@ namespace HotelListing.Test
         private List<HotelDto> hotels;
         public CountriesControllerTest()
         {
-       
+
             _mockRepo = new Mock<ICountriesRepository>();
             _controller = new CountriesController(_mockRepo.Object, _mapper, _logger);
             getCountries = new List<GetCountryDto>() {
@@ -124,7 +124,7 @@ namespace HotelListing.Test
 
         [Theory]
         [InlineData(1)]
-        public async Task PutCountry_IdIsNotEqualCountry_BadRequestResultAsync(int countryId)
+        public async Task PutCountry_IdIsNotEqualCountry_ReturnBadRequestException(int countryId)
         {
             var data = getCountries.Select(x => new UpdateCountryDto()
             {
@@ -133,10 +133,40 @@ namespace HotelListing.Test
                 ShortName = x.ShortName
             }).First(x => x.Id == countryId);
 
-            var result = await _controller.PutCountry(2, data);
-            Assert.NotEqual<int>(2, countryId);
-            var badRequestResult = Assert.IsType<BadRequestResult>(result);
-            Assert.Equal<int>(400, badRequestResult.StatusCode);
+            _mockRepo.Setup(x => x.UpdateAsync(countryId, data)).ThrowsAsync(new Exception("Invalid Id used in request"));
+
+            Exception ex = await Assert.ThrowsAsync<Exception>(() => _controller.PutCountry(countryId, data));
+            Assert.Equal("Invalid Id used in request", ex.Message);
+            Assert.Null(ex.InnerException);
+        }
+
+
+        //This method is not working correctly. Check 
+        [Theory]
+        [InlineData(1)]
+        public async Task PutCountry_EntityIsNull_ReturnNotFoundException(int countryId)
+        {
+            var data = getCountries.Select(x => new UpdateCountryDto()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                ShortName = x.ShortName
+            }).FirstOrDefault(x => x.Id == countryId);
+
+
+            Country country = getCountries.Select(x => new Country() { Id = x.Id, Name = x.Name, ShortName = x.ShortName })
+                .FirstOrDefault(x => x.Id == countryId);
+
+
+            _mockRepo.Setup(x => x.GetAsync(countryId)).ReturnsAsync(country);
+
+            _mockRepo.Setup(x => x.GetAsync(countryId)).ThrowsAsync(new Exception($"Country with id ({countryId}) was not found"));
+
+            Exception ex = await Assert.ThrowsAsync<Exception>(() => _controller.PutCountry(countryId, data));
+
+            Assert.Equal($"Country with id ({countryId}) was not found", ex.Message);
+            Assert.Null(ex.InnerException);
+
         }
 
         [Theory]
@@ -156,12 +186,100 @@ namespace HotelListing.Test
 
             var result = await _controller.PutCountry(countryId, updateCountryDto);
 
-            _mockRepo.Verify(x=>x.UpdateAsync(countryId, updateCountryDto),Times.Once);
+            _mockRepo.Verify(x => x.UpdateAsync(countryId, updateCountryDto), Times.Once);
 
             var returnNoContent = Assert.IsType<NoContentResult>(result);
 
             Assert.Equal<int>(204, returnNoContent.StatusCode);
 
         }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task PutCountry_IfCountryIsNotExists_ReturnNotFound(int countryId)
+        {
+            var data = getCountries.First(x => x.Id == countryId);
+
+            var updateCountryDto = getCountries.Select(x => new UpdateCountryDto()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                ShortName = x.ShortName
+            }).First(x => x.Id == countryId);
+
+            _mockRepo.Setup(x => x.UpdateAsync(countryId, updateCountryDto));
+            _mockRepo.Setup(x => x.Exists(10));
+
+            var result = await _controller.PutCountry(countryId, updateCountryDto);
+            var result2 = await _controller.CountryExists(10);
+
+            _mockRepo.Verify(x => x.UpdateAsync(countryId, updateCountryDto), Times.Once);
+
+            var returnNotFound = Assert.IsType<NotFoundResult>(result);
+
+            Assert.Equal<int>(404, returnNotFound.StatusCode);
+
+        }
+
+        [Fact]
+        public async void PostCountry_ActionExecutes_ReturnCreatedAction()
+        {
+            var country = getCountries.
+                Select(x => new Country() { Id = x.Id, Name = x.Name, ShortName = x.ShortName }).First();
+
+            var getCountry = getCountries.
+               Select(x => new GetCountryDto() { Id = x.Id, Name = x.Name, ShortName = x.ShortName }).First();
+
+            var createCountyDto = getCountries
+                .Select(x => new CreateCountryDto() { Name = x.Name, ShortName = x.ShortName })
+                .First();
+
+            _mockRepo.Setup(x => x.AddAsync<CreateCountryDto, GetCountryDto>(createCountyDto))
+                  .Returns((Task<GetCountryDto>)Task.CompletedTask);
+
+            var resut = await _controller.PostCountry(createCountyDto);
+
+            var createdActionResult = Assert.IsType<CreatedAtActionResult>(resut);
+
+            _mockRepo.Verify(_mockRepo => _mockRepo.AddAsync(country), Times.Once);
+
+            Assert.Equal("GetCountry", createdActionResult.ActionName);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        public async Task DeleteCountry_IdInValid_ReturnNotFound(int countryId)
+        {
+            Country country = null;
+
+            _mockRepo.Setup(x => x.GetAsync(countryId)).ReturnsAsync(country);
+
+            var resultNotFound = await _controller.DeleteCountry(countryId);
+
+            //if I return IactionResuklt, it is enough to write just resultNotFound, but if I return actionresult and class then I must also write ".Result".
+            Assert.IsType<NotFoundResult>(resultNotFound.Result);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task DeleteCountry_ActionExecutes_ReturnNoContent(int countryId)
+        {
+            CountryDto countryDto = getCountriesWithHotels.First(x => x.Id == countryId);
+            Country country = getCountries.Select(x => new Country() { Id = x.Id, Name = x.Name, ShortName = x.ShortName })
+                .First(x => x.Id == countryId);
+
+            _mockRepo.Setup(x => x.GetAsync(countryId)).ReturnsAsync(country);
+
+            _mockRepo.Setup(x => x.DeleteAsync(countryId));
+
+            var noContentResult = await _controller.DeleteCountry(countryId);
+
+            _mockRepo.Verify(x => x.DeleteAsync(countryId), Times.Once);
+
+            Assert.IsType<NoContentResult>(noContentResult.Result);
+
+
+        }
+
     }
 }
