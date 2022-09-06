@@ -211,7 +211,7 @@ namespace HotelListing.Test
             _mockRepo.Setup(x => x.Exists(10));
 
             var result = await _controller.PutCountry(countryId, updateCountryDto);
-            var result2 = await _controller.CountryExists(10);
+            //var result2 = await _controller.CountryExists(10);
 
             _mockRepo.Verify(x => x.UpdateAsync(countryId, updateCountryDto), Times.Once);
 
