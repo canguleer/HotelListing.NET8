@@ -10,18 +10,19 @@ namespace HotelListing.API.Controllers
 {
     [Route("api/v{version:apiVersion}/countries")]
     [ApiController]
+    //[Authorize]
     [ApiVersion("1.0", Deprecated = true)]
     public class CountriesController : ControllerBase
-    {
+     {
         private readonly IMapper _mapper;
         private readonly ICountriesRepository _countriesRepository;
         private readonly ILogger<CountriesController> _logger;
 
         public CountriesController(ICountriesRepository countriesRepository, IMapper mapper, ILogger<CountriesController> logger)
         {
-            this._mapper = mapper;
-            this._countriesRepository = countriesRepository;
-            this._logger = logger;
+            _mapper = mapper;
+            _countriesRepository = countriesRepository;
+            _logger = logger;
         }
 
         // GET: api/Countries/GetAll
@@ -48,7 +49,6 @@ namespace HotelListing.API.Controllers
             return Ok(country);
         }
 
-
         // PUT: api/Countries/5
         [HttpPut("{id}")]
         [Authorize]
@@ -63,10 +63,6 @@ namespace HotelListing.API.Controllers
                 if (!await CountryExists(id))
                 {
                     return NotFound();
-                }
-                else
-                {
-                    throw;
                 }
             }
 

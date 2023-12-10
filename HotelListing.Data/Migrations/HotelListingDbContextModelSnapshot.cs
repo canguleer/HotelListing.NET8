@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace HotelListing.API.Migrations
+namespace HotelListing.API.Data.Migrations
 {
     [DbContext(typeof(HotelListingDbContext))]
     partial class HotelListingDbContextModelSnapshot : ModelSnapshot
@@ -17,10 +17,10 @@ namespace HotelListing.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("HotelListing.API.Data.ApiUser", b =>
                 {
@@ -42,11 +42,9 @@ namespace HotelListing.API.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -95,20 +93,18 @@ namespace HotelListing.API.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("HotelListing.API.Data.Country", b =>
+            modelBuilder.Entity("HotelListing.API.Data.Entities.Country", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShortName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -136,23 +132,21 @@ namespace HotelListing.API.Migrations
                         });
                 });
 
-            modelBuilder.Entity("HotelListing.API.Data.Hotel", b =>
+            modelBuilder.Entity("HotelListing.API.Data.Entities.Hotel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Rating")
@@ -220,15 +214,13 @@ namespace HotelListing.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1bb4249a-4181-4112-912b-089cc8c39e46",
-                            ConcurrencyStamp = "c6de31ea-2030-4d92-9bd4-379fe3bf22b6",
+                            Id = "fc3d900f-2aa4-44cc-8b1f-9bdd2112140a",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "f9bc64fa-338f-418c-8773-02e223d94e25",
-                            ConcurrencyStamp = "0ca49184-1586-4323-b1c9-4416f794f951",
+                            Id = "03dc5a63-e6e0-420f-81ee-07581c46606f",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -240,7 +232,7 @@ namespace HotelListing.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -265,7 +257,7 @@ namespace HotelListing.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -340,9 +332,9 @@ namespace HotelListing.API.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("HotelListing.API.Data.Hotel", b =>
+            modelBuilder.Entity("HotelListing.API.Data.Entities.Hotel", b =>
                 {
-                    b.HasOne("HotelListing.API.Data.Country", "Country")
+                    b.HasOne("HotelListing.API.Data.Entities.Country", "Country")
                         .WithMany("Hotels")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -402,7 +394,7 @@ namespace HotelListing.API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("HotelListing.API.Data.Country", b =>
+            modelBuilder.Entity("HotelListing.API.Data.Entities.Country", b =>
                 {
                     b.Navigation("Hotels");
                 });

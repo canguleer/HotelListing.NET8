@@ -9,25 +9,23 @@ namespace HotelListing.WebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IConfiguration _Configure;
-        private readonly string apiBaseUrl;
+        private readonly string? _apiBaseUrl;
 
-        public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, string? apiBaseUrl)
         {
             _logger = logger;
-            _Configure = configuration;
-            apiBaseUrl = _Configure.GetValue<string>("WebAPIBaseUrl");
+            this._apiBaseUrl = apiBaseUrl;
+            configuration.GetValue<string>("WebAPIBaseUrl");
         }
 
         public async Task<IActionResult> Index()
         {
-            HttpClientHandler clientHandler = new HttpClientHandler();
-            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+            var clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
 
-            // Pass the handler to httpclient(from you are calling api)
-            HttpClient client = new HttpClient(clientHandler);
+            var client = new HttpClient(clientHandler);
 
-            string url = apiBaseUrl + "/v1/countries/GetAll";
+            var url = _apiBaseUrl + "/v1/countries/GetAll";
 
             var dd = await client.GetStringAsync(url);
 
