@@ -22,7 +22,6 @@ namespace HotelListing.API.Controllers
             this._mapper = mapper;
         }
 
-        // GET: api/Hotels
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetHotels()
         {
@@ -30,7 +29,6 @@ namespace HotelListing.API.Controllers
             return Ok(hotels);
         }
 
-        // GET: api/Hotels/?StartIndex=0&pagesize=25&PageNumber=1
         [HttpGet]
         public async Task<ActionResult<PagedResult<HotelDto>>> GetPagedHotels([FromQuery] QueryParameters queryParameters)
 {
@@ -38,7 +36,6 @@ namespace HotelListing.API.Controllers
             return Ok(pagedHotelsResult);
         }
 
-        // GET: api/Hotels/5
         [HttpGet("{id}")]
         public async Task<ActionResult<HotelDto>> GetHotel(int id)
         {
@@ -46,8 +43,6 @@ namespace HotelListing.API.Controllers
             return Ok(hotel);
         }
 
-        // PUT: api/Hotels/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutHotel(int id, HotelDto hotelDto)
         {
@@ -65,8 +60,6 @@ namespace HotelListing.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Hotels
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<HotelDto>> PostHotel(CreateHotelDto hotelDto)
         {
@@ -74,7 +67,6 @@ namespace HotelListing.API.Controllers
             return CreatedAtAction(nameof(GetHotel), new { id = hotel.Id }, hotel);
         }
 
-        // DELETE: api/Hotels/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHotel(int id)
         {

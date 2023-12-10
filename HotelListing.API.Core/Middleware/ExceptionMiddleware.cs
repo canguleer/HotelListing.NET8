@@ -30,11 +30,11 @@ namespace HotelListing.API.Core.Middleware
             }
         }
 
-        private Task HandleExceptionAsync(HttpContext context, Exception ex)
+        protected virtual Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
             context.Response.ContentType = "application/json";
-            HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
-            var errorDetails = new ErrorDeatils
+            var statusCode = HttpStatusCode.InternalServerError;
+            var errorDetails = new ErrorDetails
             {
                 ErrorType = "Failure",
                 ErrorMessage = ex.Message,
@@ -42,27 +42,26 @@ namespace HotelListing.API.Core.Middleware
 
             switch (ex)
             {
-                case NotFoundException notFoundException:
+                case NotFoundException:
                     statusCode = HttpStatusCode.NotFound;
                     errorDetails.ErrorType = "Not Found";
                     break;
-                case BadRequestException badRequestException:
+                case BadRequestException:
                     statusCode = HttpStatusCode.BadRequest;
                     errorDetails.ErrorType = "Bad Request";
                     break;
-                default:
-                    break;
             }
 
-            string response = JsonConvert.SerializeObject(errorDetails);
+            var response = JsonConvert.SerializeObject(errorDetails);
             context.Response.StatusCode = (int)statusCode;
             return context.Response.WriteAsync(response);
         }
     }
 
-    public class ErrorDeatils
+    public class ErrorDetails
     {
-        public string ErrorType { get; set; }
-        public string ErrorMessage { get; set; }
+        public string? ErrorType { get; set; }
+        public string? ErrorMessage { get; set; }
     }
+
 }

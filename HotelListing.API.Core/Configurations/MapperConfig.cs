@@ -3,6 +3,7 @@ using HotelListing.API.Data;
 using HotelListing.API.Core.Models.Country;
 using HotelListing.API.Core.Models.Hotel;
 using HotelListing.API.Core.Models.Users;
+using HotelListing.API.Data.Entities;
 
 namespace HotelListing.API.Core.Configurations
 {

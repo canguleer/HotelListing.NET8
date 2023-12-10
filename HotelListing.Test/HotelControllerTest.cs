@@ -2,15 +2,8 @@
 using HotelListing.API.Controllers;
 using HotelListing.API.Core.Contracts;
 using HotelListing.API.Core.Models.Hotel;
-using HotelListing.API.Core.Repository;
-using HotelListing.API.Data;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace HotelListing.Test

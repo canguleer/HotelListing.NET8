@@ -12,12 +12,14 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("HotelListingDbConnectionString");
-builder.Services.AddDbContext<HotelListingDbContext>(options => {
+builder.Services.AddDbContext<HotelListingDbContext>(options =>
+{
     options.UseSqlServer(connectionString);
 });
 
@@ -27,8 +29,6 @@ builder.Services.AddIdentityCore<ApiUser>()
     .AddEntityFrameworkStores<HotelListingDbContext>()
     .AddDefaultTokenProviders();
 
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -36,18 +36,17 @@ builder.Services.AddSwaggerGen(options =>
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
 
-         Description = @"JWT Authorization header using the Bearer scheme.
+        Description = @"JWT Authorization header using the Bearer scheme.
                          Enter 'Bearer' [space] and then your token in the text input below.
                          Example : 'Bearer 12345abvdhh'",
-         Name = "Authorization",
-         In=ParameterLocation.Header,
-         Type = SecuritySchemeType.ApiKey,
-         Scheme = "Bearer"
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
     });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
-
         {
             new OpenApiSecurityScheme
             {
@@ -68,14 +67,15 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddCors(options => {
-    options.AddPolicy("AllowAll", 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
         b => b.AllowAnyHeader()
             .AllowAnyOrigin()
             .AllowAnyMethod());
 });
 
-builder.Services.AddApiVersioning(options => 
+builder.Services.AddApiVersioning(options =>
 {
     options.AssumeDefaultVersionWhenUnspecified = true;
     options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
@@ -103,10 +103,12 @@ builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 builder.Services.AddScoped<IHotelsRepository, HotelsRepository>();
 builder.Services.AddScoped<IAuthManager, AuthManager>();
 
-builder.Services.AddAuthentication(options => {
+builder.Services.AddAuthentication(options =>
+{
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // "Bearer"
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options => {
+}).AddJwtBearer(options =>
+{
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
@@ -116,7 +118,7 @@ builder.Services.AddAuthentication(options => {
         ClockSkew = TimeSpan.Zero,
         ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
         ValidAudience = builder.Configuration["JwtSettings:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"] ?? string.Empty))
     };
 });
 
@@ -126,7 +128,7 @@ builder.Services.AddResponseCaching(options =>
     options.UseCaseSensitivePaths = true;
 });
 
-builder.Services.AddControllers().AddOData(options => 
+builder.Services.AddControllers().AddOData(options =>
 {
     options.Select().Filter().OrderBy();
 });
@@ -157,7 +159,7 @@ app.Use(async (context, next) =>
             MaxAge = TimeSpan.FromSeconds(10)
         };
     context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
-        new string[] { "Accept-Encoding" };
+        new[] { "Accept-Encoding" };
 
     await next();
 });

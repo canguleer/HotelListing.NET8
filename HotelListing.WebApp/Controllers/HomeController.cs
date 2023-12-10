@@ -31,7 +31,7 @@ namespace HotelListing.WebApp.Controllers
 
             var dd = await client.GetStringAsync(url);
 
-            var data = JsonConvert.DeserializeObject<List<Country>>(dd).ToList();
+            var data = JsonConvert.DeserializeObject<List<Country>>(dd)!.ToList();
 
             return View(data);
         }

@@ -1,4 +1,5 @@
 ﻿using HotelListing.API.Data.Confirgurations;
+using HotelListing.API.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +7,7 @@ namespace HotelListing.API.Data
 {
     public class HotelListingDbContext : IdentityDbContext<ApiUser>
     {
-        public HotelListingDbContext(DbContextOptions options) : base(options)
+        public HotelListingDbContext(DbContextOptions<HotelListingDbContext> options) : base(options)
         {
 
         }

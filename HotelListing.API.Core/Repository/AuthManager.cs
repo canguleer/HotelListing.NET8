@@ -25,10 +25,10 @@ namespace HotelListing.API.Core.Repository
 
         public AuthManager(IMapper mapper, UserManager<ApiUser> userManager, IConfiguration configuration, ILogger<AuthManager> logger)
         {
-            this._mapper = mapper;
-            this._userManager = userManager;
-            this._configuration = configuration;
-            this._logger = logger;
+            _mapper = mapper;
+            _userManager = userManager;
+            _configuration = configuration;
+            _logger = logger;
         }
 
         public async Task<string> CreateRefreshToken()
@@ -44,8 +44,8 @@ namespace HotelListing.API.Core.Repository
             _logger.LogInformation($"Looking for user with email {loginDto.Email}");
             _user = await _userManager.FindByEmailAsync(loginDto.Email);
             bool isValidUser = await _userManager.CheckPasswordAsync(_user, loginDto.Password);
-            
-            if(_user == null || isValidUser == false)
+
+            if (_user == null || isValidUser == false)
             {
                 _logger.LogWarning($"User with email {loginDto.Email} was not found");
                 return null;
@@ -84,7 +84,7 @@ namespace HotelListing.API.Core.Repository
             var username = tokenContent.Claims.ToList().FirstOrDefault(q => q.Type == JwtRegisteredClaimNames.Email)?.Value;
             _user = await _userManager.FindByNameAsync(username);
 
-            if(_user == null || _user.Id != request.UserId)
+            if (_user == null || _user.Id != request.UserId)
             {
                 return null;
             }

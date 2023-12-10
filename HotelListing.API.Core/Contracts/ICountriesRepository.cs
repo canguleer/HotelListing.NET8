@@ -1,5 +1,5 @@
 ﻿using HotelListing.API.Core.Models.Country;
-using HotelListing.API.Data;
+using HotelListing.API.Data.Entities;
 
 namespace HotelListing.API.Core.Contracts
 {
