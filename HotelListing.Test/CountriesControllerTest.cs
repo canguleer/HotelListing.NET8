@@ -1,18 +1,11 @@
 ﻿using AutoMapper;
 using HotelListing.API.Controllers;
 using HotelListing.API.Core.Contracts;
-using HotelListing.API.Core.Exceptions;
 using HotelListing.API.Core.Models.Country;
 using HotelListing.API.Core.Models.Hotel;
-using HotelListing.API.Core.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using HotelListing.API.Data.Entities;
 

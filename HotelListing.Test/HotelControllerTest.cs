@@ -8,7 +8,6 @@ using Xunit;
 
 namespace HotelListing.Test
 {
-
     public class HotelControllerTest
     {
         private readonly Mock<IHotelsRepository> _mockRepo;

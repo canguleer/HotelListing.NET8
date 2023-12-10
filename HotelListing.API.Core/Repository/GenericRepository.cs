@@ -89,11 +89,9 @@ namespace HotelListing.API.Core.Repository
                 .ToListAsync();
         }
 
-        public async Task<T> GetAsync(int? id)
+        public async Task<T?> GetAsync(int? id)
         {
-            if (id is null)
-                return null;
-
+            if (id is null) return null;
 
             return await _context.Set<T>().FindAsync(id);
         }
@@ -101,12 +99,8 @@ namespace HotelListing.API.Core.Repository
         public async Task<TResult> GetAsync<TResult>(int? id)
         {
             var result = await _context.Set<T>().FindAsync(id);
-            if (result is null)
-            {
-                throw new NotFoundException(typeof(T).Name, id.HasValue ? id : "No Key Provided");
-            }
-
-            return _mapper.Map<TResult>(result);
+            return result is null ? throw new NotFoundException(typeof(T).Name, id.HasValue ? id : "No Key Provided")
+                : _mapper.Map<TResult>(result);
         }
 
         public async Task UpdateAsync(T entity)

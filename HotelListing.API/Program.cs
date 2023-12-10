@@ -12,7 +12,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Text;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -148,18 +147,20 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 
+// caching: enables in the middleware and create the caching code for middleware
 app.UseResponseCaching();
 
+// indicates the caching rules
 app.Use(async (context, next) =>
 {
     context.Response.GetTypedHeaders().CacheControl =
         new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
         {
             Public = true,
-            MaxAge = TimeSpan.FromSeconds(10)
+            MaxAge = TimeSpan.FromSeconds(30)
         };
     context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
-        new[] { "Accept-Encoding" };
+        new [] { "Accept-Encoding" };
 
     await next();
 });
