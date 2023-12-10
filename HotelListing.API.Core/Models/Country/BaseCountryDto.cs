@@ -9,4 +9,3 @@ namespace HotelListing.API.Core.Models.Country
         public string? ShortName { get; set; }
     }
 }
-?
