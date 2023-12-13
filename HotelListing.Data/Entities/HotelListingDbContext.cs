@@ -1,9 +1,8 @@
 ﻿using HotelListing.API.Data.Confirgurations;
-using HotelListing.API.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace HotelListing.API.Data
+namespace HotelListing.API.Data.Entities
 {
     public class HotelListingDbContext : IdentityDbContext<ApiUser>
     {
@@ -11,8 +10,8 @@ namespace HotelListing.API.Data
         {
 
         }
-        public DbSet<Hotel> Hotels { get; set; }
-        public DbSet<Country> Countries { get; set; }
+        public virtual DbSet<Hotel> Hotels { get; set; }
+        public virtual DbSet<Country> Countries { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

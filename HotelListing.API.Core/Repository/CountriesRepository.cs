@@ -3,7 +3,6 @@ using AutoMapper.QueryableExtensions;
 using HotelListing.API.Core.Contracts;
 using HotelListing.API.Core.Exceptions;
 using HotelListing.API.Core.Models.Country;
-using HotelListing.API.Data;
 using HotelListing.API.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 

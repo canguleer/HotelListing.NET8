@@ -4,28 +4,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HotelListing.API.Data.Entities
 {
-    [Table("Hotel")]
-    [Index("CountryId", Name = "UK_Hotel", IsUnique = true)]
-    public partial class Hotel
+    [Table("User")]
+    public partial class User
     {
         #region [ Properties ]
 
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey(nameof(CountryId))]
-        public int CountryId { get; set; }
+        public string UserName { get; set; }
+        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
 
-        public string Name { get; set; } = null!;
-
-        public string Address { get; set; } = null!;
-
-        [StringLength(1000)]
-        public string? AdditionalInfo { get; set; }
-
-        public double Rating { get; set; }
 
         [Column(TypeName = "datetime")]
+
         public DateTime LastChanged { get; set; }
 
         [StringLength(100)]

@@ -34,6 +34,7 @@ namespace HotelListing.API.Data.Confirgurations
                     Rating = 4
                 }
             );
+
         }
     }
 }

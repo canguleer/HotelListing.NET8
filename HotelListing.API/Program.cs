@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Text;
+using HotelListing.API.Data.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using HotelListing.API.Core.Contracts;
-using HotelListing.API.Data;
 using HotelListing.API.Core.Models;
 using HotelListing.API.Core.Models.Country;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using HotelListing.API.Core.Exceptions;
 using System.Diagnostics.Metrics;
 using HotelListing.API.Core.Models.Hotel;
+using HotelListing.API.Data.Entities;
 
 namespace HotelListing.API.Core.Repository
 {
