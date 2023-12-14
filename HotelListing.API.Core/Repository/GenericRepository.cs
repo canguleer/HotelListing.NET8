@@ -2,12 +2,8 @@
 using AutoMapper.QueryableExtensions;
 using HotelListing.API.Core.Contracts;
 using HotelListing.API.Core.Models;
-using HotelListing.API.Core.Models.Country;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using HotelListing.API.Core.Exceptions;
-using System.Diagnostics.Metrics;
-using HotelListing.API.Core.Models.Hotel;
 using HotelListing.API.Data.Entities;
 
 namespace HotelListing.API.Core.Repository
@@ -40,7 +36,7 @@ namespace HotelListing.API.Core.Repository
             return _mapper.Map<TResult>(entity);
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Guid id)
         {
             var entity = await GetAsync(id);
 
@@ -53,7 +49,7 @@ namespace HotelListing.API.Core.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> Exists(int id)
+        public async Task<bool> Exists(Guid id)
         {
             var entity = await GetAsync(id);
             return entity != null;
@@ -89,14 +85,14 @@ namespace HotelListing.API.Core.Repository
                 .ToListAsync();
         }
 
-        public async Task<T?> GetAsync(int? id)
+        public async Task<T?> GetAsync(Guid? id)
         {
             if (id is null) return null;
 
             return await _context.Set<T>().FindAsync(id);
         }
 
-        public async Task<TResult> GetAsync<TResult>(int? id)
+        public async Task<TResult> GetAsync<TResult>(Guid? id)
         {
             var result = await _context.Set<T>().FindAsync(id);
             return result is null ? throw new NotFoundException(typeof(T).Name, id.HasValue ? id : "No Key Provided")
@@ -109,7 +105,7 @@ namespace HotelListing.API.Core.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync<TSource>(int id, TSource source) where TSource : IBaseDto
+        public async Task UpdateAsync<TSource>(Guid id, TSource source) where TSource : IBaseDto
         {
             if (id != source.Id)
                 throw new BadRequestException("Invalid Id used in request");

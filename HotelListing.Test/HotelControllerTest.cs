@@ -22,7 +22,7 @@ namespace HotelListing.Test
             {
                new HotelDto()
                {
-                   Id = 1,
+                   Id = new Guid(),
                    Name = "Sandals Resort and Spa",
                    Address = "Negril",
                    Rating = 4.5,
@@ -30,7 +30,7 @@ namespace HotelListing.Test
                },
                  new HotelDto()
                {
-                   Id = 2,
+                   Id = new Guid(),
                    Name = "Comfort Suites",
                    Address = "George Town",
                    Rating = 4.3,
@@ -38,7 +38,7 @@ namespace HotelListing.Test
                },
                  new HotelDto()
                {
-                   Id = 3,
+                   Id = new Guid(),
                    Name = "Grand Palldium",
                    Address = "Nassua",
                    Rating = 4,

@@ -38,7 +38,7 @@ namespace HotelListing.API.Controllers
 
         // GET: api/Countries/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CountryDto>> GetCountry(int id)
+        public async Task<ActionResult<CountryDto>> GetCountry(Guid id)
         {
             var country = await _countriesRepository.GetDetails(id);
 
@@ -53,7 +53,7 @@ namespace HotelListing.API.Controllers
         // PUT: api/Countries/5
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> PutCountry(int id, UpdateCountryDto updateCountryDto)
+        public async Task<IActionResult> PutCountry(Guid id, UpdateCountryDto updateCountryDto)
         {
             if (id != updateCountryDto.Id)
                 return BadRequest("Invalid Record Id");
@@ -91,7 +91,7 @@ namespace HotelListing.API.Controllers
         // DELETE: api/Countries/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> DeleteCountry(int id)
+        public async Task<IActionResult> DeleteCountry(Guid id)
         {
             var country = await _countriesRepository.GetAsync(id);
             if (country == null)
@@ -102,7 +102,7 @@ namespace HotelListing.API.Controllers
             return NoContent();
         }
 
-        private async Task<bool> CountryExists(int id)
+        private async Task<bool> CountryExists(Guid id)
         {
             return await _countriesRepository.Exists(id);
         }

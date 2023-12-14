@@ -10,7 +10,7 @@ namespace HotelListing.API.Core.Repository
 {
     public class CountriesRepository (HotelListingDbContext context, IMapper mapper) : GenericRepository<Country>(context, mapper), ICountriesRepository
     {
-        public async Task<CountryDto> GetDetails(int id)
+        public async Task<CountryDto> GetDetails(Guid id)
         {
             var country = await context.Countries
                 .Include(q => q.Hotels)

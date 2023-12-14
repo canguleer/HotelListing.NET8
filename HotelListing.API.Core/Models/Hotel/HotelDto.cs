@@ -2,6 +2,6 @@
 {
     public class HotelDto : BaseHotelDto, IBaseDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

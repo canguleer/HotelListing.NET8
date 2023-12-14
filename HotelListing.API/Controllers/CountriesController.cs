@@ -43,7 +43,7 @@ namespace HotelListing.API.Controllers
 
         // GET: api/Countries/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCountry(int id)
+        public async Task<IActionResult> GetCountry(Guid id)
         {
             var country = await _countriesRepository.GetDetails(id);
             return Ok(country);
@@ -52,7 +52,7 @@ namespace HotelListing.API.Controllers
         // PUT: api/Countries/5
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> PutCountry(int id, UpdateCountryDto updateCountryDto)
+        public async Task<IActionResult> PutCountry(Guid id, UpdateCountryDto updateCountryDto)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace HotelListing.API.Controllers
         // DELETE: api/Countries/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<CountryDto>> DeleteCountry(int id)
+        public async Task<ActionResult<CountryDto>> DeleteCountry(Guid id)
         {
             var county = await _countriesRepository.GetAsync(id);
             if (county == null)
@@ -93,7 +93,7 @@ namespace HotelListing.API.Controllers
 
 
         [HttpGet("CountryExists")]
-        public async Task<bool> CountryExists(int id)
+        public async Task<bool> CountryExists(Guid id)
         {
             return await _countriesRepository.Exists(id);
         }

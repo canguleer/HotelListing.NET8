@@ -11,7 +11,7 @@ namespace HotelListing.API.Data.Confirgurations
             builder.HasData(
                 new Hotel
                 {
-                    Id = 1,
+                    Id = new Guid(),
                     Name = "Sandals Resort and Spa",
                     Address = "Negril",
                     CountryId = 1,
@@ -19,7 +19,7 @@ namespace HotelListing.API.Data.Confirgurations
                 },
                 new Hotel
                 {
-                    Id = 2,
+                    Id = new Guid(),
                     Name = "Comfort Suites",
                     Address = "George Town",
                     CountryId = 3,
@@ -27,7 +27,7 @@ namespace HotelListing.API.Data.Confirgurations
                 },
                 new Hotel
                 {
-                    Id = 3,
+                    Id = new Guid(),
                     Name = "Grand Palldium",
                     Address = "Nassua",
                     CountryId = 2,

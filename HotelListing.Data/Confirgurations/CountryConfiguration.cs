@@ -11,19 +11,19 @@ namespace HotelListing.API.Data.Confirgurations
             builder.HasData(
                 new Country
                 {
-                    Id = 1,
+                    Id = new Guid(),
                     Name = "Jamaica",
                     ShortName = "JM"
                 },
                 new Country
                 {
-                    Id = 2,
+                    Id = new Guid(),
                     Name = "Bahamas",
                     ShortName = "BS"
                 },
                 new Country
                 {
-                    Id = 3,
+                    Id = new Guid(),
                     Name = "Cayman Island",
                     ShortName = "CI"
                 }

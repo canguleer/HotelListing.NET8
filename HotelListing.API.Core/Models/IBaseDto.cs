@@ -8,6 +8,6 @@ namespace HotelListing.API.Core.Models
 {
     public interface IBaseDto
     {
-        int Id { get; set; }
+        Guid Id { get; set; }
     }
 }

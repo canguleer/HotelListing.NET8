@@ -25,36 +25,37 @@ namespace HotelListing.Test
         private List<HotelDto> hotels;
         public CountriesControllerTest()
         {
-
+         
             _mockRepo = new Mock<ICountriesRepository>();
             _controller = new CountriesController(_mockRepo.Object, _mapper, _logger);
-            getCountries = new List<GetCountryDto>() {
-                new GetCountryDto() { Id = 1, Name = "Turkey", ShortName = "TR" },
-                new GetCountryDto() { Id = 1, Name = "Bulgaria", ShortName = "BG" },
-                new GetCountryDto() { Id = 1, Name = "Germany", ShortName = "GN" }
+            getCountries = new List<GetCountryDto>
+            {
+                new() { Id = new Guid(), Name = "Turkey", ShortName = "TR" },
+                new() { Id = new Guid(), Name = "Bulgaria", ShortName = "BG" },
+                new() { Id = new Guid(), Name = "Germany", ShortName = "GN" }
             };
 
             hotels = new List<HotelDto>()
             {
-               new HotelDto()
+               new()
                {
-                   Id = 1,
+                   Id = new Guid(),
                    Name = "Sandals Resort and Spa",
                    Address = "Negril",
                    Rating = 4.5,
                    CountryId = 1
                },
-                 new HotelDto()
+                 new()
                {
-                   Id = 2,
+                   Id = new Guid(),
                    Name = "Comfort Suites",
                    Address = "George Town",
                    Rating = 4.3,
                    CountryId = 2
                },
-                 new HotelDto()
+                 new()
                {
-                   Id = 3,
+                   Id = new Guid(),
                    Name = "Grand Palldium",
                    Address = "Nassua",
                    Rating = 4,
@@ -63,9 +64,9 @@ namespace HotelListing.Test
             };
 
             getCountriesWithHotels = new List<CountryDto>() {
-                new CountryDto() { Id = 1, Name = "Turkey", ShortName = "TR",Hotels = hotels},
-                new CountryDto() { Id = 1, Name = "Bulgaria", ShortName = "BG",Hotels = hotels },
-                new CountryDto() { Id = 1, Name = "Germany", ShortName = "GN",Hotels = hotels }
+                new() { Id = new Guid(), Name = "Turkey", ShortName = "TR",Hotels = hotels},
+                new() { Id = new Guid(), Name = "Bulgaria", ShortName = "BG",Hotels = hotels },
+                new() { Id = new Guid(), Name = "Germany", ShortName = "GN",Hotels = hotels }
             };
         }
 
@@ -86,8 +87,8 @@ namespace HotelListing.Test
         }
 
         [Theory]
-        [InlineData(1)]
-        public async void GetCountry_ActionExecutes_ReturnOkResultWithCountry(int countryId)
+        [InlineData("1481a3a5-6116-4039-91f7-ad7069e09e3f")]
+        public async void GetCountry_ActionExecutes_ReturnOkResultWithCountry(Guid countryId)
         {
             CountryDto country = getCountriesWithHotels.First(x => x.Id == countryId);
 
@@ -99,13 +100,13 @@ namespace HotelListing.Test
 
             var returnCountry = Assert.IsAssignableFrom<CountryDto>(okResult.Value);
 
-            Assert.Equal<int>(countryId, returnCountry.Id);
+            Assert.Equal(countryId, returnCountry.Id);
         }
 
 
         [Theory]
-        [InlineData(0)]
-        public async Task GetCountry_InValid_ReturnNotFound(int countryId)
+        [InlineData("1481a3a5-6116-4039-91f7-ad7069e09e3f")]
+        public async Task GetCountry_InValid_ReturnNotFound(Guid countryId)
         {
             _mockRepo.Setup(x => x.GetDetails(countryId)).Throws(new Exception($"GetCountry with id ({countryId}) was not found"));
 
@@ -116,8 +117,8 @@ namespace HotelListing.Test
 
 
         [Theory]
-        [InlineData(1)]
-        public async Task PutCountry_IdIsNotEqualCountry_ReturnBadRequestException(int countryId)
+        [InlineData("1481a3a5-6116-4039-91f7-ad7069e09e3f")]
+        public async Task PutCountry_IdIsNotEqualCountry_ReturnBadRequestException(Guid countryId)
         {
             var data = getCountries.Select(x => new UpdateCountryDto()
             {
@@ -136,8 +137,8 @@ namespace HotelListing.Test
 
         //This method is not working correctly. Check 
         [Theory]
-        [InlineData(1)]
-        public async Task PutCountry_EntityIsNull_ReturnNotFoundException(int countryId)
+        [InlineData("1481a3a5-6116-4039-91f7-ad7069e09e3f")]
+        public async Task PutCountry_EntityIsNull_ReturnNotFoundException(Guid countryId)
         {
             var data = getCountries.Select(x => new UpdateCountryDto()
             {
@@ -163,8 +164,8 @@ namespace HotelListing.Test
         }
 
         [Theory]
-        [InlineData(1)]
-        public async Task PutCountry_ActionExecutes_ReturnNoContentAsync(int countryId)
+        [InlineData("1481a3a5-6116-4039-91f7-ad7069e09e3f")]
+        public async Task PutCountry_ActionExecutes_ReturnNoContentAsync(Guid countryId)
         {
             var data = getCountries.First(x => x.Id == countryId);
 
@@ -188,8 +189,8 @@ namespace HotelListing.Test
         }
 
         [Theory]
-        [InlineData(1)]
-        public async Task PutCountry_IfCountryIsNotExists_ReturnNotFound(int countryId)
+        [InlineData("1481a3a5-6116-4039-91f7-ad7069e09e3f")]
+        public async Task PutCountry_IfCountryIsNotExists_ReturnNotFound(Guid countryId)
         {
             var data = getCountries.First(x => x.Id == countryId);
 
@@ -201,7 +202,7 @@ namespace HotelListing.Test
             }).First(x => x.Id == countryId);
 
             _mockRepo.Setup(x => x.UpdateAsync(countryId, updateCountryDto));
-            _mockRepo.Setup(x => x.Exists(10));
+           // _mockRepo.Setup(x => x.Exists(10));
 
             var result = await _controller.PutCountry(countryId, updateCountryDto);
             //var result2 = await _controller.CountryExists(10);
@@ -240,8 +241,8 @@ namespace HotelListing.Test
         }
 
         [Theory]
-        [InlineData(0)]
-        public async Task DeleteCountry_IdInValid_ReturnNotFound(int countryId)
+        [InlineData("1481a3a5-6116-4039-91f7-ad7069e09e3f")]
+        public async Task DeleteCountry_IdInValid_ReturnNotFound(Guid countryId)
         {
             Country country = null;
 
@@ -254,8 +255,8 @@ namespace HotelListing.Test
         }
 
         [Theory]
-        [InlineData(1)]
-        public async Task DeleteCountry_ActionExecutes_ReturnNoContent(int countryId)
+        [InlineData("1481a3a5-6116-4039-91f7-ad7069e09e3f")]
+        public async Task DeleteCountry_ActionExecutes_ReturnNoContent(Guid countryId)
         {
             CountryDto countryDto = getCountriesWithHotels.First(x => x.Id == countryId);
             Country country = getCountries.Select(x => new Country() { Id = x.Id, Name = x.Name, ShortName = x.ShortName })
@@ -270,8 +271,6 @@ namespace HotelListing.Test
             _mockRepo.Verify(x => x.DeleteAsync(countryId), Times.Once);
 
             Assert.IsType<NoContentResult>(noContentResult.Result);
-
-
         }
 
     }
