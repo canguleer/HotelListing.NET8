@@ -18,7 +18,6 @@ namespace HotelListing.API.Core.Repository
             this._context = context;
             this._mapper = mapper;
         }
-
         public async Task<T> AddAsync(T entity)
         {
             await _context.AddAsync(entity);

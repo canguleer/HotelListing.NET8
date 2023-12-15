@@ -43,7 +43,7 @@ namespace HotelListing.Test
                    Name = "Sandals Resort and Spa",
                    Address = "Negril",
                    Rating = 4.5,
-                   CountryId = 1
+                   CountryId = new Guid(),
                },
                  new()
                {
@@ -51,7 +51,7 @@ namespace HotelListing.Test
                    Name = "Comfort Suites",
                    Address = "George Town",
                    Rating = 4.3,
-                   CountryId = 2
+                   CountryId = new Guid(),
                },
                  new()
                {
@@ -59,7 +59,7 @@ namespace HotelListing.Test
                    Name = "Grand Palldium",
                    Address = "Nassua",
                    Rating = 4,
-                   CountryId = 3
+                   CountryId = new Guid(),
                }
             };
 
