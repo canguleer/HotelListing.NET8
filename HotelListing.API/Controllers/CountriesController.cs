@@ -25,7 +25,7 @@ namespace HotelListing.API.Controllers
             _logger = logger;
         }
 
-        // GET: api/Countries/GetAll
+        // GET: api/Country/GetAll
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetCountries()
         {
@@ -33,7 +33,7 @@ namespace HotelListing.API.Controllers
             return Ok(countries);
         }
 
-        // GET: api/Countries/?StartIndex=0&pagesize=25&PageNumber=1
+        // GET: api/Country/?StartIndex=0&pagesize=25&PageNumber=1
         [HttpGet("GetPagedCountries")]
         public async Task<ActionResult<PagedResult<GetCountryDto>>> GetPagedCountries([FromQuery] QueryParameters queryParameters)
         {
@@ -41,15 +41,23 @@ namespace HotelListing.API.Controllers
             return Ok(pagedCountriesResult);
         }
 
-        // GET: api/Countries/5
+        // GET: api/Country/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCountry(Guid id)
+        {
+            var country = await _countriesRepository.GetAsync(id);
+            return Ok(country);
+        }
+
+        // GET: api/Country/5
+        [HttpGet("GetCountryDetails/{id}")]
+        public async Task<IActionResult> GetCountryDetails(Guid id)
         {
             var country = await _countriesRepository.GetDetails(id);
             return Ok(country);
         }
 
-        // PUT: api/Countries/5
+        // PUT: api/Country/5
         [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> PutCountry(Guid id, UpdateCountryDto updateCountryDto)
@@ -69,7 +77,7 @@ namespace HotelListing.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Countries
+        // POST: api/Country
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> PostCountry(CreateCountryDto createCountryDto)
@@ -78,7 +86,7 @@ namespace HotelListing.API.Controllers
             return CreatedAtAction(nameof(GetCountry), new { id = country.Id }, country);
         }
 
-        // DELETE: api/Countries/5
+        // DELETE: api/Country/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<CountryDto>> DeleteCountry(Guid id)

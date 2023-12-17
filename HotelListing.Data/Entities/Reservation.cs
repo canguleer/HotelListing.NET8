@@ -44,7 +44,7 @@ namespace HotelListing.API.Data.Entities
 
         #region [ Navigations ]
 
-        [ForeignKey("Id")]
+        [ForeignKey("HotelId")]
         [InverseProperty("Reservation")]
         public virtual Hotel Hotel { get; set; } = null!;
 

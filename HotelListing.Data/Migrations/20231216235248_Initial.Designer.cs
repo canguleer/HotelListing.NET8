@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelListing.API.Data.Migrations
 {
     [DbContext(typeof(HotelListingDbContext))]
-    [Migration("20231210174352_Initial")]
+    [Migration("20231216235248_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -98,94 +98,73 @@ namespace HotelListing.API.Data.Migrations
 
             modelBuilder.Entity("HotelListing.API.Data.Entities.Country", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .UseCollation("Latin1_General_CI_AI");
 
                     b.Property<string>("ShortName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .UseCollation("Latin1_General_CS_AI");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK_country");
 
-                    b.ToTable("Countries");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Jamaica",
-                            ShortName = "JM"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Bahamas",
-                            ShortName = "BS"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Cayman Island",
-                            ShortName = "CI"
-                        });
+                    b.ToTable("Country");
                 });
 
             modelBuilder.Entity("HotelListing.API.Data.Entities.Hotel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("(newid())");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("AdditionalInfo")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CountryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("(newid())");
+
+                    b.Property<DateTime>("LastChanged")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getutcdate())");
+
+                    b.Property<string>("LastChangedBy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(100)")
+                        .UseCollation("Latin1_General_CI_AS");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .UseCollation("Latin1_General_CI_AI");
 
                     b.Property<double>("Rating")
                         .HasColumnType("float");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK_hotel");
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("Hotels");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "Negril",
-                            CountryId = 1,
-                            Name = "Sandals Resort and Spa",
-                            Rating = 4.5
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Address = "George Town",
-                            CountryId = 3,
-                            Name = "Comfort Suites",
-                            Rating = 4.2999999999999998
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Address = "Nassua",
-                            CountryId = 2,
-                            Name = "Grand Palldium",
-                            Rating = 4.0
-                        });
+                    b.ToTable("Hotel");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -217,13 +196,13 @@ namespace HotelListing.API.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fc3d900f-2aa4-44cc-8b1f-9bdd2112140a",
+                            Id = "9830b0fe-48e7-4cf0-964c-c99a0ef318ad",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "03dc5a63-e6e0-420f-81ee-07581c46606f",
+                            Id = "5b0c22cc-4f27-4c93-a7d8-4e7d5e1a8a76",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -338,10 +317,10 @@ namespace HotelListing.API.Data.Migrations
             modelBuilder.Entity("HotelListing.API.Data.Entities.Hotel", b =>
                 {
                     b.HasOne("HotelListing.API.Data.Entities.Country", "Country")
-                        .WithMany("Hotels")
+                        .WithMany("Hotel")
                         .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_hotel_country");
 
                     b.Navigation("Country");
                 });
@@ -399,7 +378,7 @@ namespace HotelListing.API.Data.Migrations
 
             modelBuilder.Entity("HotelListing.API.Data.Entities.Country", b =>
                 {
-                    b.Navigation("Hotels");
+                    b.Navigation("Hotel");
                 });
 #pragma warning restore 612, 618
         }

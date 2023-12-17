@@ -13,7 +13,7 @@ namespace HotelListing.API.Data.Entities
         public Guid Id { get; set; }
 
         [ForeignKey(nameof(CountryId))]
-        public int CountryId { get; set; }
+        public Guid CountryId { get; set; }
 
         public string Name { get; set; } = null!;
 
@@ -35,7 +35,7 @@ namespace HotelListing.API.Data.Entities
 
         #region [ Navigations ]
 
-        [ForeignKey("Id")]
+        [ForeignKey("CountryId")]
         [InverseProperty("Hotel")]
         public virtual Country Country { get; set; } = null!;
 

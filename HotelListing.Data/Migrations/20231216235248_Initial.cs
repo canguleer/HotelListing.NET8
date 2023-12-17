@@ -55,17 +55,16 @@ namespace HotelListing.API.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Countries",
+                name: "Country",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ShortName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(newid())"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true, collation: "Latin1_General_CI_AI"),
+                    ShortName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true, collation: "Latin1_General_CS_AI")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Countries", x => x.Id);
+                    table.PrimaryKey("PK_country", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -175,25 +174,26 @@ namespace HotelListing.API.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Hotels",
+                name: "Hotel",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CountryId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Rating = table.Column<double>(type: "float", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(newid())"),
+                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(newid())"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false, collation: "Latin1_General_CI_AI"),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AdditionalInfo = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Rating = table.Column<double>(type: "float", nullable: false),
+                    LastChanged = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getutcdate())"),
+                    LastChangedBy = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false, collation: "Latin1_General_CI_AS")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Hotels", x => x.Id);
+                    table.PrimaryKey("PK_hotel", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Hotels_Countries_CountryId",
+                        name: "FK_hotel_country",
                         column: x => x.CountryId,
-                        principalTable: "Countries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "Country",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
@@ -201,28 +201,8 @@ namespace HotelListing.API.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "03dc5a63-e6e0-420f-81ee-07581c46606f", null, "User", "USER" },
-                    { "fc3d900f-2aa4-44cc-8b1f-9bdd2112140a", null, "Administrator", "ADMINISTRATOR" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Countries",
-                columns: new[] { "Id", "Name", "ShortName" },
-                values: new object[,]
-                {
-                    { 1, "Jamaica", "JM" },
-                    { 2, "Bahamas", "BS" },
-                    { 3, "Cayman Island", "CI" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Hotels",
-                columns: new[] { "Id", "Address", "CountryId", "Name", "Rating" },
-                values: new object[,]
-                {
-                    { 1, "Negril", 1, "Sandals Resort and Spa", 4.5 },
-                    { 2, "George Town", 3, "Comfort Suites", 4.2999999999999998 },
-                    { 3, "Nassua", 2, "Grand Palldium", 4.0 }
+                    { "5b0c22cc-4f27-4c93-a7d8-4e7d5e1a8a76", null, "User", "USER" },
+                    { "9830b0fe-48e7-4cf0-964c-c99a0ef318ad", null, "Administrator", "ADMINISTRATOR" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -265,8 +245,8 @@ namespace HotelListing.API.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Hotels_CountryId",
-                table: "Hotels",
+                name: "IX_Hotel_CountryId",
+                table: "Hotel",
                 column: "CountryId");
         }
 
@@ -289,7 +269,7 @@ namespace HotelListing.API.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Hotels");
+                name: "Hotel");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -298,7 +278,7 @@ namespace HotelListing.API.Data.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Countries");
+                name: "Country");
         }
     }
 }

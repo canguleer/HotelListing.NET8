@@ -11,30 +11,15 @@ namespace HotelListing.API.Data.Confirgurations
             builder.HasData(
                 new Hotel
                 {
-                    Id = new Guid(),
+                    Id = new Guid("fff56899-6925-4095-9da9-74a74d79c853"),
                     Name = "Sandals Resort and Spa",
                     Address = "Negril",
-                    CountryId = 1,
-                    Rating = 4.5
-                },
-                new Hotel
-                {
-                    Id = new Guid(),
-                    Name = "Comfort Suites",
-                    Address = "George Town",
-                    CountryId = 3,
-                    Rating = 4.3
-                },
-                new Hotel
-                {
-                    Id = new Guid(),
-                    Name = "Grand Palldium",
-                    Address = "Nassua",
-                    CountryId = 2,
-                    Rating = 4
-                }
-            );
-
+                    AdditionalInfo = null,
+                    CountryId = new Guid("0b5682f0-8a72-47aa-88c3-7dcbc3dd53c1"),
+                    Rating = 4.3,
+                    LastChanged = DateTime.UtcNow,
+                    LastChangedBy = "ZZZ"
+                });
         }
     }
 }
