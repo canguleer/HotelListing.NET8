@@ -10,7 +10,7 @@ namespace HotelListing.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+   // [Authorize]
     public class HotelsController(IHotelsRepository hotelsRepository, IMapper mapper) : ControllerBase
     {
         [HttpGet("GetAll")]
@@ -28,14 +28,14 @@ namespace HotelListing.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<HotelDto>> GetHotel(int id)
+        public async Task<ActionResult<HotelDto>> GetHotel(Guid id)
         {
             var hotel = await hotelsRepository.GetAsync<HotelDto>(id);
             return Ok(hotel);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutHotel(int id, HotelDto hotelDto)
+        public async Task<IActionResult> PutHotel(Guid id, HotelDto hotelDto)
         {
             try
             {
@@ -59,13 +59,13 @@ namespace HotelListing.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteHotel(int id)
+        public async Task<IActionResult> DeleteHotel(Guid id)
         {
             await hotelsRepository.DeleteAsync(id); 
             return NoContent();
         }
 
-        private async Task<bool> HotelExists(int id)
+        private async Task<bool> HotelExists(Guid id)
         {
             return await hotelsRepository.Exists(id);
         }

@@ -5,16 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HotelListing.API.Data.Entities
 {
-    [Table("User")]
-    public partial class User : IdentityUser<Guid>
+    [Table("Role")]
+    public partial class Role : IdentityRole<Guid>
     {
         #region [ Properties ]
-
-        [StringLength(100)]
-        public string FirstName { get; set; } = null!;
-
-        [StringLength(100)]
-        public string LastName { get; set; } = null!;
+        public string Description { get; set; } = null!;
 
         [Column(TypeName = "datetime")]
         public DateTime LastChanged { get; set; }
@@ -24,6 +19,7 @@ namespace HotelListing.API.Data.Entities
         public string LastChangedBy { get; set; } = null!;
 
         #endregion
+
 
     }
 }

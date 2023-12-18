@@ -2,7 +2,6 @@
 {
     public partial class Hotel
     {
-
         #region [ Enums ]
 
         [Flags]

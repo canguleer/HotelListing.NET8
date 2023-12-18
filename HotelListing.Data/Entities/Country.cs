@@ -1,10 +1,40 @@
-﻿namespace HotelListing.API.Data.Entities
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace HotelListing.API.Data.Entities
 {
+    [Table("Country")]
     public class Country
     {
-        public int Id { get; set; }
-        public string? Name { get; set; }
+        #region [ Properties ] 
+
+        [Key]
+        public Guid Id { get; set; }
+
+        [StringLength(50)]
+        public string Name { get; set; } = null!;
+
+        [StringLength(50)]
         public string? ShortName { get; set; }
-        public virtual IEnumerable<Hotel>? Hotels { get; set; } 
+
+        [Column(TypeName = "datetime")]
+        public DateTime LastChanged { get; set; }
+
+        [StringLength(100)]
+        [Unicode(false)]
+        public string LastChangedBy { get; set; } = null!;
+
+        #endregion
+
+        #region [ Navigations ]
+
+
+        [InverseProperty("Country")]
+        public virtual IEnumerable<Hotel> Hotel { get; set; } = new List<Hotel>();
+
+        #endregion
+
+
     }
 }

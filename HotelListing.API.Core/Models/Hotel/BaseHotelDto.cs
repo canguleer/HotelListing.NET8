@@ -2,9 +2,9 @@
 
 namespace HotelListing.API.Core.Models.Hotel
 {
-    public abstract class BaseHotelDto
+    public abstract class BaseHotelDto :BaseDto
     {
-        [Required] 
+        [Required]
         public string Name { get; set; } = null!;
 
         [Required]
@@ -13,7 +13,7 @@ namespace HotelListing.API.Core.Models.Hotel
         public double? Rating { get; set; }
 
         [Required]
-        [Range(1, int.MaxValue)]
-        public int CountryId { get; set; }
+        public Guid CountryId { get; set; }
+
     }
 }

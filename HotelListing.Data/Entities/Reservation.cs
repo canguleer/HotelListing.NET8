@@ -1,19 +1,30 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelListing.API.Data.Entities
 {
-    [Table("Hotel")]
-    public partial class Hotel
+    [Table("Reservation")]
+    public partial class Reservation
     {
+
+        #region [ Expressions ]
+
+        /// <summary>
+        /// Expression to get the entity's primary-key
+        /// </summary>
+        public static readonly Expression<Func<Reservation, Guid>> PrimaryKeyExpression = r => r.Id;
+
+        #endregion
+
         #region [ Properties ]
 
         [Key]
         public Guid Id { get; set; }
 
-        [ForeignKey(nameof(CountryId))]
-        public Guid CountryId { get; set; }
+        [ForeignKey(nameof(HotelId))]
+        public int HotelId { get; set; }
 
         public string Name { get; set; } = null!;
 
@@ -21,8 +32,6 @@ namespace HotelListing.API.Data.Entities
 
         [StringLength(1000)]
         public string? AdditionalInfo { get; set; }
-
-        public double Rating { get; set; }
 
         [Column(TypeName = "datetime")]
         public DateTime LastChanged { get; set; }
@@ -35,9 +44,9 @@ namespace HotelListing.API.Data.Entities
 
         #region [ Navigations ]
 
-        [ForeignKey("CountryId")]
-        [InverseProperty("Hotel")]
-        public virtual Country Country { get; set; } = null!;
+        [ForeignKey("HotelId")]
+        [InverseProperty("Reservation")]
+        public virtual Hotel Hotel { get; set; } = null!;
 
         #endregion
     }

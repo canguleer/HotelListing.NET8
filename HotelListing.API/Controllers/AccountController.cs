@@ -23,7 +23,7 @@ namespace HotelListing.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> Register([FromBody] ApiUserDto apiUserDto)
+        public async Task<ActionResult> Register([FromBody] UserDto apiUserDto)
         {
             _logger.LogInformation($"Registration Attempt for {apiUserDto.Email}");
             var errors = (await _authManager.Register(apiUserDto)).ToList();
