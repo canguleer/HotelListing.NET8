@@ -15,19 +15,20 @@ namespace HotelListing.Test
     public class CountriesControllerTest
     {
         private readonly Mock<ICountriesRepository> _mockRepo;
-        private readonly CountriesController _controller;
+        private readonly CountriesController _country;
         private readonly IMapper _mapper;
         private readonly ILogger<CountriesController> _logger;
 
+        private readonly IRoleRepository _roleRepository;
 
         private List<GetCountryDto> getCountries;
         private List<CountryDto> getCountriesWithHotels;
         private List<HotelDto> hotels;
         public CountriesControllerTest()
         {
-         
+
             _mockRepo = new Mock<ICountriesRepository>();
-            _controller = new CountriesController(_mockRepo.Object, _mapper, _logger);
+            _country = new CountriesController(_mockRepo.Object, _mapper, _logger);
             getCountries = new List<GetCountryDto>
             {
                 new() { Id = new Guid(), Name = "Turkey", ShortName = "TR" },
@@ -70,6 +71,15 @@ namespace HotelListing.Test
             };
         }
 
+        //MethodName/What methods can do / what
+        [Fact]
+        public async void PlayGround()
+        {
+            var result = await _roleRepository.GetAllAsync();
+            Assert.True(result.Count > 0);
+
+        }
+
 
         //MethodName/What methods can do / what
         [Fact]
@@ -77,7 +87,7 @@ namespace HotelListing.Test
         {
             _mockRepo.Setup(x => x.GetAllAsync<GetCountryDto>()).ReturnsAsync(getCountries);
 
-            var result = await _controller.GetCountries();
+            var result = await _country.GetCountries();
 
             var okResult = Assert.IsType<OkObjectResult>(result);
 
@@ -90,11 +100,11 @@ namespace HotelListing.Test
         [InlineData("1481a3a5-6116-4039-91f7-ad7069e09e3f")]
         public async void GetCountry_ActionExecutes_ReturnOkResultWithCountry(Guid countryId)
         {
-            CountryDto country = getCountriesWithHotels.First(x => x.Id == countryId);
+            var country = getCountriesWithHotels.First(x => x.Id == countryId);
 
             _mockRepo.Setup(x => x.GetDetails(countryId)).ReturnsAsync(country);
 
-            var result = await _controller.GetCountry(countryId);
+            var result = await _country.GetCountry(countryId);
 
             var okResult = Assert.IsType<OkObjectResult>(result);
 
@@ -110,7 +120,7 @@ namespace HotelListing.Test
         {
             _mockRepo.Setup(x => x.GetDetails(countryId)).Throws(new Exception($"GetCountry with id ({countryId}) was not found"));
 
-            Exception ex = await Assert.ThrowsAsync<Exception>(() => _controller.GetCountry(countryId));
+            Exception ex = await Assert.ThrowsAsync<Exception>(() => _country.GetCountry(countryId));
             Assert.Equal($"GetCountry with id ({countryId}) was not found", ex.Message);
             Assert.Null(ex.InnerException);
         }
@@ -129,7 +139,7 @@ namespace HotelListing.Test
 
             _mockRepo.Setup(x => x.UpdateAsync(countryId, data)).ThrowsAsync(new Exception("Invalid Id used in request"));
 
-            Exception ex = await Assert.ThrowsAsync<Exception>(() => _controller.PutCountry(countryId, data));
+            Exception ex = await Assert.ThrowsAsync<Exception>(() => _country.PutCountry(countryId, data));
             Assert.Equal("Invalid Id used in request", ex.Message);
             Assert.Null(ex.InnerException);
         }
@@ -156,7 +166,7 @@ namespace HotelListing.Test
 
             _mockRepo.Setup(x => x.GetAsync(countryId)).ThrowsAsync(new Exception($"Country with id ({countryId}) was not found"));
 
-            Exception ex = await Assert.ThrowsAsync<Exception>(() => _controller.PutCountry(countryId, data));
+            Exception ex = await Assert.ThrowsAsync<Exception>(() => _country.PutCountry(countryId, data));
 
             Assert.Equal($"Country with id ({countryId}) was not found", ex.Message);
             Assert.Null(ex.InnerException);
@@ -178,7 +188,7 @@ namespace HotelListing.Test
 
             _mockRepo.Setup(x => x.UpdateAsync(countryId, updateCountryDto));
 
-            var result = await _controller.PutCountry(countryId, updateCountryDto);
+            var result = await _country.PutCountry(countryId, updateCountryDto);
 
             _mockRepo.Verify(x => x.UpdateAsync(countryId, updateCountryDto), Times.Once);
 
@@ -202,10 +212,10 @@ namespace HotelListing.Test
             }).First(x => x.Id == countryId);
 
             _mockRepo.Setup(x => x.UpdateAsync(countryId, updateCountryDto));
-           // _mockRepo.Setup(x => x.Exists(10));
+            // _mockRepo.Setup(x => x.Exists(10));
 
-            var result = await _controller.PutCountry(countryId, updateCountryDto);
-            //var result2 = await _controller.CountryExists(10);
+            var result = await _country.PutCountry(countryId, updateCountryDto);
+            //var result2 = await _country.CountryExists(10);
 
             _mockRepo.Verify(x => x.UpdateAsync(countryId, updateCountryDto), Times.Once);
 
@@ -231,7 +241,7 @@ namespace HotelListing.Test
             _mockRepo.Setup(x => x.AddAsync<CreateCountryDto, GetCountryDto>(createCountyDto))
                   .Returns((Task<GetCountryDto>)Task.CompletedTask);
 
-            var resut = await _controller.PostCountry(createCountyDto);
+            var resut = await _country.PostCountry(createCountyDto);
 
             var createdActionResult = Assert.IsType<CreatedAtActionResult>(resut);
 
@@ -248,7 +258,7 @@ namespace HotelListing.Test
 
             _mockRepo.Setup(x => x.GetAsync(countryId)).ReturnsAsync(country);
 
-            var resultNotFound = await _controller.DeleteCountry(countryId);
+            var resultNotFound = await _country.DeleteCountry(countryId);
 
             //if I return IactionResuklt, it is enough to write just resultNotFound, but if I return actionresult and class then I must also write ".Result".
             Assert.IsType<NotFoundResult>(resultNotFound.Result);
@@ -266,7 +276,7 @@ namespace HotelListing.Test
 
             _mockRepo.Setup(x => x.DeleteAsync(countryId));
 
-            var noContentResult = await _controller.DeleteCountry(countryId);
+            var noContentResult = await _country.DeleteCountry(countryId);
 
             _mockRepo.Verify(x => x.DeleteAsync(countryId), Times.Once);
 

@@ -1,6 +1,5 @@
 using HotelListing.API.Core.Configurations;
 using HotelListing.API.Core.Contracts;
-using HotelListing.API.Data;
 using HotelListing.API.Core.Middleware;
 using HotelListing.API.Core.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,9 +22,9 @@ builder.Services.AddDbContext<HotelListingDbContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-builder.Services.AddIdentityCore<ApiUser>()
-    .AddRoles<IdentityRole>()
-    .AddTokenProvider<DataProtectorTokenProvider<ApiUser>>("HotelListingApi")
+builder.Services.AddIdentityCore<User>()
+    .AddRoles<Role>()
+    .AddTokenProvider<DataProtectorTokenProvider<User>>("HotelListingApi")
     .AddEntityFrameworkStores<HotelListingDbContext>()
     .AddDefaultTokenProviders();
 
@@ -87,6 +86,7 @@ builder.Services.AddApiVersioning(options =>
     );
 });
 
+
 builder.Services.AddVersionedApiExplorer(
     options =>
     {
@@ -102,6 +102,8 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 builder.Services.AddScoped<IHotelsRepository, HotelsRepository>();
 builder.Services.AddScoped<IAuthManager, AuthManager>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -161,7 +163,7 @@ app.Use(async (context, next) =>
             MaxAge = TimeSpan.FromSeconds(30)
         };
     context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
-        new [] { "Accept-Encoding" };
+        new[] { "Accept-Encoding" };
 
     await next();
 });

@@ -7,10 +7,11 @@ using HotelListing.API.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
 using HotelListing.API.Core.Models.Hotel;
+using Microsoft.Extensions.Logging;
 
 namespace HotelListing.API.Core.Repository
 {
-    public class CountriesRepository(HotelListingDbContext context, IMapper mapper) : GenericRepository<Country>(context, mapper), ICountriesRepository
+    public class CountriesRepository(HotelListingDbContext context, IMapper mapper, ILogger<Country> logger) : GenericRepository<Country>(context, mapper,logger), ICountriesRepository
     {
         public async Task<CountryDto> GetDetails(Guid id)
         {

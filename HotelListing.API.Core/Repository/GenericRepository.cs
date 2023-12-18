@@ -5,18 +5,21 @@ using HotelListing.API.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using HotelListing.API.Core.Exceptions;
 using HotelListing.API.Data.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace HotelListing.API.Core.Repository
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
     {
         private readonly HotelListingDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ILogger<T> _logger;
 
-        public GenericRepository(HotelListingDbContext context, IMapper mapper)
+        public GenericRepository(HotelListingDbContext context, IMapper mapper, ILogger<T> logger)
         {
             this._context = context;
             this._mapper = mapper;
+            this._logger = logger;
         }
         public async Task<T> AddAsync(T entity)
         {
@@ -28,10 +31,16 @@ namespace HotelListing.API.Core.Repository
         public async Task<TResult> AddAsync<TSource, TResult>(TSource source)
         {
             var entity = _mapper.Map<T>(source);
-
-            await _context.AddAsync(entity);
-            await _context.SaveChangesAsync();
-
+            try
+            {
+                await _context.AddAsync(entity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something Went wrong while processing {nameof(AddAsync)} on {typeof(T)} entity ");
+            }
+            
             return _mapper.Map<TResult>(entity);
         }
 
@@ -40,9 +49,8 @@ namespace HotelListing.API.Core.Repository
             var entity = await GetAsync(id);
 
             if (entity is null)
-            {
                 throw new NotFoundException(typeof(T).Name, id);
-            }
+            
 
             _context.Set<T>().Remove(entity);
             await _context.SaveChangesAsync();
@@ -86,7 +94,8 @@ namespace HotelListing.API.Core.Repository
 
         public async Task<T?> GetAsync(Guid? id)
         {
-            if (id is null) return null;
+            if (id is null) 
+                return new T();
 
             return await _context.Set<T>().FindAsync(id);
         }

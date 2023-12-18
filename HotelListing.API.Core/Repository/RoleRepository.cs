@@ -5,10 +5,11 @@ using Microsoft.Extensions.Logging;
 
 namespace HotelListing.API.Core.Repository
 {
-    public class HotelsRepository : GenericRepository<Hotel>, IHotelsRepository
+    public class RoleRepository : GenericRepository<Role>, IRoleRepository
     {
-        public HotelsRepository(HotelListingDbContext context, IMapper mapper, ILogger<Hotel> logger) : base(context, mapper,logger)
+        public RoleRepository(HotelListingDbContext context, IMapper mapper, ILogger<Role> logger) : base(context, mapper, logger)
         {
+
         }
     }
 }

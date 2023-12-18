@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using HotelListing.API.Core.Contracts;
-using HotelListing.API.Data;
 using HotelListing.API.Core.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -9,21 +8,22 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using HotelListing.API.Data.Entities;
 
 namespace HotelListing.API.Core.Repository
 {
     public class AuthManager : IAuthManager
     {
         private readonly IMapper _mapper;
-        private readonly UserManager<ApiUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthManager> _logger;
-        private ApiUser _user = null!;
+        private User _user = null!;
 
         private const string LoginProvider = "HotelListingApi";
         private const string RefreshToken = "RefreshToken";
 
-        public AuthManager(IMapper mapper, UserManager<ApiUser> userManager, IConfiguration configuration, ILogger<AuthManager> logger)
+        public AuthManager(IMapper mapper, UserManager<User> userManager, IConfiguration configuration, ILogger<AuthManager> logger)
         {
             _mapper = mapper;
             _userManager = userManager;
@@ -48,7 +48,7 @@ namespace HotelListing.API.Core.Repository
             if (isValidUser == false)
             {
                 _logger.LogWarning($"User with email {loginDto.Email} was not found");
-                return null;
+                return new AuthResponseDto();
             }
 
             var token = await GenerateToken();
@@ -57,23 +57,23 @@ namespace HotelListing.API.Core.Repository
             return new AuthResponseDto
             {
                 Token = token,
-                UserId = _user.Id,
+                UserId = $"{_user.Id}",
                 RefreshToken = await CreateRefreshToken()
             };
         }
 
-        public async Task<IEnumerable<IdentityError>> Register(ApiUserDto userDto)
+        public async Task<IEnumerable<IdentityError>> Register(UserDto userDto)
         {
-            _user = _mapper.Map<ApiUser>(userDto);
+            _user = _mapper.Map<User>(userDto);
             _user.UserName = userDto.Email;
+            _user.LastChanged=DateTime.UtcNow;
+            _user.LastChangedBy="ZZZ";
 
             var result = await _userManager.CreateAsync(_user, userDto.Password);
 
             if (result.Succeeded)
-            {
-                await _userManager.AddToRoleAsync(_user, "User");
-            }
-
+                await _userManager.AddToRoleAsync(_user, nameof(Role.RoleName.User));
+            
             return result.Errors;
         }
 
@@ -84,25 +84,24 @@ namespace HotelListing.API.Core.Repository
             var username = tokenContent.Claims.ToList().FirstOrDefault(q => q.Type == JwtRegisteredClaimNames.Email)?.Value;
             _user = (await _userManager.FindByNameAsync(username!))!;
 
-            if (_user.Id != request.UserId)
+            if ($"{_user.Id}" != request.UserId)
                 return null;
 
             var isValidRefreshToken = await _userManager.VerifyUserTokenAsync(_user, LoginProvider, RefreshToken, request.RefreshToken!);
 
             if (isValidRefreshToken)
             {
-                var token = await GenerateToken();
                 return new AuthResponseDto
                 {
-                    Token = token,
-                    UserId = _user.Id,
+                    Token = await GenerateToken(),
+                    UserId = $"{_user.Id}",
                     RefreshToken = await CreateRefreshToken()
                 };
             }
 
             await _userManager.UpdateSecurityStampAsync(_user);
 
-            return null;
+            return new AuthResponseDto();
         }
 
         private async Task<string> GenerateToken()
@@ -120,7 +119,7 @@ namespace HotelListing.API.Core.Repository
                 new(JwtRegisteredClaimNames.Sub, _user.Email!),
                 new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new (JwtRegisteredClaimNames.Email, _user.Email!),
-                new ("uid", _user.Id),
+                new ("uid", $"{_user.Id}"),
             }
             .Union(userClaims).Union(roleClaims);
 

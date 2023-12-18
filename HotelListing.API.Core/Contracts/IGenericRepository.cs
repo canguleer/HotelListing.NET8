@@ -4,6 +4,9 @@ namespace HotelListing.API.Core.Contracts
 {
     public interface IGenericRepository<T> where T : class
     {
+        public DateTime LastChanged { get; set; }
+        public string LastChangedBy { get; set; }
+
         Task<T?> GetAsync(Guid? id);
         Task<TResult> GetAsync<TResult>(Guid? id);
         Task<List<T>> GetAllAsync();
@@ -15,5 +18,6 @@ namespace HotelListing.API.Core.Contracts
         Task UpdateAsync(T entity);
         Task UpdateAsync<TSource>(Guid id, TSource source) where TSource : IBaseDto;
         Task<bool> Exists(Guid id);
+
     }
 }
