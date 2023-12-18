@@ -21,6 +21,11 @@ namespace HotelListing.API.Core.Repository
             this._mapper = mapper;
             this._logger = logger;
         }
+
+        public DateTime LastChanged { get; set; }
+        public string LastChangedBy { get; set; }
+
+
         public async Task<T> AddAsync(T entity)
         {
             await _context.AddAsync(entity);
