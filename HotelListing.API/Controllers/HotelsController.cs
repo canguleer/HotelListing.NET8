@@ -10,7 +10,7 @@ namespace HotelListing.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize]
+    [Authorize]
     public class HotelsController(IHotelsRepository hotelsRepository, IMapper mapper) : ControllerBase
     {
         [HttpGet("GetAll")]
@@ -45,7 +45,7 @@ namespace HotelListing.API.Controllers
             {
                 if (!await HotelExists(id)) 
                     return NotFound();
-                else throw; 
+                throw;
             }
 
             return NoContent();

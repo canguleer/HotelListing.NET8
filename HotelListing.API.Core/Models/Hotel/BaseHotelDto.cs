@@ -2,7 +2,7 @@
 
 namespace HotelListing.API.Core.Models.Hotel
 {
-    public abstract class BaseHotelDto :BaseDto
+    public abstract class BaseHotelDto
     {
         [Required]
         public string Name { get; set; } = null!;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using HotelListing.API.Core.Contracts;
 using HotelListing.API.Data.Entities;
@@ -43,5 +44,6 @@ namespace HotelListing.API.Controllers
         {
             return await _roleRepository.Exists(id);
         }
+
     }
 }

@@ -59,7 +59,7 @@ namespace HotelListing.API.Controllers
 
         // PUT: api/Country/5
         [HttpPut("{id}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> PutCountry(Guid id, UpdateCountryDto updateCountryDto)
         {
             try
@@ -79,7 +79,7 @@ namespace HotelListing.API.Controllers
 
         // POST: api/Country
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> PostCountry(CreateCountryDto createCountryDto)
         {
             var country = await _countriesRepository.AddAsync<CreateCountryDto, GetCountryDto>(createCountryDto);

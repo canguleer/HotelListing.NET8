@@ -17,10 +17,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("HotelListingDbConnectionString");
-builder.Services.AddDbContext<HotelListingDbContext>(options =>
+
+builder.Services.AddDbContext<HotelListingDbContext>((options) =>
 {
     options.UseSqlServer(connectionString);
 });
+
+
 
 builder.Services.AddIdentityCore<User>()
     .AddRoles<Role>()
@@ -105,6 +108,9 @@ builder.Services.AddScoped<IAuthManager, AuthManager>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
+// HttpContextAccessor class is a component that provides access to the current HTTP request and response context. It allows you to access various aspects of the HTTP request and response, such as headers, cookies, query parameters, and user claims.
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // "Bearer"
@@ -134,6 +140,9 @@ builder.Services.AddControllers().AddOData(options =>
 {
     options.Select().Filter().OrderBy();
 });
+
+// HttpContextAccessor to get the current user in my .NET Core Web API.
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

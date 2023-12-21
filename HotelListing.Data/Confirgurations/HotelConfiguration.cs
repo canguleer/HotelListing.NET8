@@ -17,8 +17,12 @@ namespace HotelListing.API.Data.Confirgurations
                     AdditionalInfo = null,
                     CountryId = new Guid("0b5682f0-8a72-47aa-88c3-7dcbc3dd53c1"),
                     Rating = 4.3,
-                    LastChanged = DateTime.UtcNow,
-                    LastChangedBy = "ZZZ"
+                    LastChangedBy = "ZZZ",
+                    LastChangedOn = DateTime.UtcNow,
+                    CreatedOn = DateTime.UtcNow,
+                    CreatedBy = "ZZZ",
+            
+
                 });
         }
     }

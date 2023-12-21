@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using HotelListing.API.Core.Contracts;
 using HotelListing.API.Core.Exceptions;
 using HotelListing.API.Core.Models.Country;
 using HotelListing.API.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography.X509Certificates;
 using HotelListing.API.Core.Models.Hotel;
 using Microsoft.Extensions.Logging;
 

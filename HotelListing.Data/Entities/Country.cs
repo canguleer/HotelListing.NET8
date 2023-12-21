@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using HotelListing.API.Data.Contracts;
 
 namespace HotelListing.API.Data.Entities
 {
     [Table("Country")]
-    public class Country
+    public class Country : IAuditableEntity
     {
         #region [ Properties ] 
 
@@ -17,13 +17,10 @@ namespace HotelListing.API.Data.Entities
 
         [StringLength(50)]
         public string? ShortName { get; set; }
-
-        [Column(TypeName = "datetime")]
-        public DateTime LastChanged { get; set; }
-
-        [StringLength(100)]
-        [Unicode(false)]
         public string LastChangedBy { get; set; } = null!;
+        public DateTime LastChangedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public string CreatedBy { get; set; } = null!;
 
         #endregion
 
@@ -34,7 +31,6 @@ namespace HotelListing.API.Data.Entities
         public virtual IEnumerable<Hotel> Hotel { get; set; } = new List<Hotel>();
 
         #endregion
-
 
     }
 }

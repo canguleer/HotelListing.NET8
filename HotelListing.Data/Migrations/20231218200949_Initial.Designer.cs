@@ -4,6 +4,7 @@ using HotelListing.API.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelListing.API.Data.Migrations
 {
     [DbContext(typeof(HotelListingDbContext))]
-    partial class HotelListingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231218200949_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,9 +67,9 @@ namespace HotelListing.API.Data.Migrations
                         {
                             Id = new Guid("68a16966-4bd7-4d69-8d6f-3464910a829f"),
                             CreatedBy = "ZZZ",
-                            CreatedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2782),
+                            CreatedOn = new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(7017),
                             LastChangedBy = "ZZZ",
-                            LastChangedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2782),
+                            LastChangedOn = new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(7017),
                             Name = "Jamaica",
                             ShortName = "JM"
                         },
@@ -74,9 +77,9 @@ namespace HotelListing.API.Data.Migrations
                         {
                             Id = new Guid("1228d541-26e2-4b10-9560-29a9c92532b1"),
                             CreatedBy = "ZZZ",
-                            CreatedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2785),
+                            CreatedOn = new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(7020),
                             LastChangedBy = "ZZZ",
-                            LastChangedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2785),
+                            LastChangedOn = new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(7020),
                             Name = "Bahamas",
                             ShortName = "BS"
                         },
@@ -84,9 +87,9 @@ namespace HotelListing.API.Data.Migrations
                         {
                             Id = new Guid("0b5682f0-8a72-47aa-88c3-7dcbc3dd53c1"),
                             CreatedBy = "ZZZ",
-                            CreatedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2787),
+                            CreatedOn = new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(7022),
                             LastChangedBy = "ZZZ",
-                            LastChangedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2787),
+                            LastChangedOn = new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(7022),
                             Name = "Cayman Island",
                             ShortName = "CI"
                         });
@@ -113,12 +116,14 @@ namespace HotelListing.API.Data.Migrations
                         .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastChangedBy")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)")
@@ -151,9 +156,9 @@ namespace HotelListing.API.Data.Migrations
                             Address = "Negril",
                             CountryId = new Guid("0b5682f0-8a72-47aa-88c3-7dcbc3dd53c1"),
                             CreatedBy = "ZZZ",
-                            CreatedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2851),
+                            CreatedOn = new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(7088),
                             LastChangedBy = "ZZZ",
-                            LastChangedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2850),
+                            LastChangedOn = new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(7087),
                             Name = "Sandals Resort and Spa",
                             Rating = 4.2999999999999998
                         });
@@ -211,10 +216,10 @@ namespace HotelListing.API.Data.Migrations
                         {
                             Id = new Guid("158c3c5d-063b-4531-8553-6fc5e5a8c7c2"),
                             CreatedBy = "ZZZ",
-                            CreatedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2635),
+                            CreatedOn = new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(6881),
                             Description = "Indicates that the role is an admin of System",
                             LastChangedBy = "ZZZ",
-                            LastChangedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2632),
+                            LastChangedOn = new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(6879),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
@@ -222,10 +227,10 @@ namespace HotelListing.API.Data.Migrations
                         {
                             Id = new Guid("2f13b959-78dc-47b4-b714-7ecbc862e0da"),
                             CreatedBy = "ZZZ",
-                            CreatedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2639),
+                            CreatedOn = new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(6884),
                             Description = "Indicates that the role is an user of System",
                             LastChangedBy = "ZZZ",
-                            LastChangedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2638),
+                            LastChangedOn = new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(6883),
                             Name = "User",
                             NormalizedName = "USER"
                         });

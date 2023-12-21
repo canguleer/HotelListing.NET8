@@ -15,9 +15,10 @@ namespace HotelListing.API.Data.Confirgurations
                     Name = nameof(Role.RoleName.Admin),
                     NormalizedName = nameof(Role.RoleName.Admin).ToUpper(),
                     Description = "Indicates that the role is an admin of System",
-                    LastChanged = DateTime.UtcNow,
+                    LastChangedOn = DateTime.UtcNow,
                     LastChangedBy = "ZZZ",
-
+                    CreatedBy = "ZZZ",
+                    CreatedOn = DateTime.UtcNow
                 },
                 new Role
                 {
@@ -25,8 +26,10 @@ namespace HotelListing.API.Data.Confirgurations
                     Name = nameof(Role.RoleName.User),
                     NormalizedName = nameof(Role.RoleName.User).ToUpper(),
                     Description = "Indicates that the role is an user of System",
-                    LastChanged = DateTime.UtcNow,
+                    LastChangedOn = DateTime.UtcNow,
                     LastChangedBy = "ZZZ",
+                    CreatedBy = "ZZZ",
+                    CreatedOn = DateTime.UtcNow
                 }
             );
         }

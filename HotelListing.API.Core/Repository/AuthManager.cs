@@ -9,6 +9,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using HotelListing.API.Data.Entities;
+using Microsoft.AspNetCore.Http;
+using System.Security.Principal;
 
 namespace HotelListing.API.Core.Repository
 {
@@ -20,15 +22,18 @@ namespace HotelListing.API.Core.Repository
         private readonly ILogger<AuthManager> _logger;
         private User _user = null!;
 
+        private readonly IHttpContextAccessor _contextAccessor;
+
         private const string LoginProvider = "HotelListingApi";
         private const string RefreshToken = "RefreshToken";
 
-        public AuthManager(IMapper mapper, UserManager<User> userManager, IConfiguration configuration, ILogger<AuthManager> logger)
+        public AuthManager(IMapper mapper, UserManager<User> userManager, IConfiguration configuration, ILogger<AuthManager> logger, IHttpContextAccessor contextAccessor)
         {
             _mapper = mapper;
             _userManager = userManager;
             _configuration = configuration;
             _logger = logger;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<string> CreateRefreshToken()
@@ -66,8 +71,6 @@ namespace HotelListing.API.Core.Repository
         {
             _user = _mapper.Map<User>(userDto);
             _user.UserName = userDto.Email;
-            _user.LastChanged=DateTime.UtcNow;
-            _user.LastChangedBy="ZZZ";
 
             var result = await _userManager.CreateAsync(_user, userDto.Password);
 

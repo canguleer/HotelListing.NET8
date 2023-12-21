@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using HotelListing.API.Data.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelListing.API.Data.Entities
 {
     [Table("User")]
-    public partial class User : IdentityUser<Guid>
+    public partial class User : IdentityUser<Guid>, IAuditableEntity
     {
         #region [ Properties ]
 
@@ -16,12 +17,13 @@ namespace HotelListing.API.Data.Entities
         [StringLength(100)]
         public string LastName { get; set; } = null!;
 
-        [Column(TypeName = "datetime")]
-        public DateTime LastChanged { get; set; }
-
         [StringLength(100)]
         [Unicode(false)]
         public string LastChangedBy { get; set; } = null!;
+
+        public DateTime LastChangedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public string CreatedBy { get; set; } = null!;
 
         #endregion
 

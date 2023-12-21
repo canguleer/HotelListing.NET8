@@ -19,8 +19,10 @@ namespace HotelListing.API.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastChanged = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastChangedBy = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
+                    LastChangedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -37,8 +39,10 @@ namespace HotelListing.API.Data.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    LastChanged = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastChangedBy = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
+                    LastChangedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -66,8 +70,10 @@ namespace HotelListing.API.Data.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "(newid())"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, collation: "Latin1_General_CI_AI"),
                     ShortName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true, collation: "Latin1_General_CS_AI"),
-                    LastChanged = table.Column<DateTime>(type: "datetime", nullable: false),
-                    LastChangedBy = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false)
+                    LastChangedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastChangedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -190,8 +196,10 @@ namespace HotelListing.API.Data.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AdditionalInfo = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     Rating = table.Column<double>(type: "float", nullable: false),
-                    LastChanged = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getutcdate())"),
-                    LastChangedBy = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false, collation: "Latin1_General_CI_AS")
+                    LastChangedBy = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false, collation: "Latin1_General_CI_AS"),
+                    LastChangedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "(getutcdate())"),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -205,27 +213,27 @@ namespace HotelListing.API.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Description", "LastChanged", "LastChangedBy", "Name", "NormalizedName" },
+                columns: new[] { "Id", "ConcurrencyStamp", "CreatedBy", "CreatedOn", "Description", "LastChangedBy", "LastChangedOn", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("158c3c5d-063b-4531-8553-6fc5e5a8c7c2"), null, "Indicates that the role is an admin of System", new DateTime(2023, 12, 18, 13, 43, 16, 594, DateTimeKind.Utc).AddTicks(1276), "ZZZ", "Admin", "ADMIN" },
-                    { new Guid("2f13b959-78dc-47b4-b714-7ecbc862e0da"), null, "Indicates that the role is an user of System", new DateTime(2023, 12, 18, 13, 43, 16, 594, DateTimeKind.Utc).AddTicks(1280), "ZZZ", "User", "USER" }
+                    { new Guid("158c3c5d-063b-4531-8553-6fc5e5a8c7c2"), null, "ZZZ", new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(6881), "Indicates that the role is an admin of System", "ZZZ", new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(6879), "Admin", "ADMIN" },
+                    { new Guid("2f13b959-78dc-47b4-b714-7ecbc862e0da"), null, "ZZZ", new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(6884), "Indicates that the role is an user of System", "ZZZ", new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(6883), "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Country",
-                columns: new[] { "Id", "LastChanged", "LastChangedBy", "Name", "ShortName" },
+                columns: new[] { "Id", "CreatedBy", "CreatedOn", "LastChangedBy", "LastChangedOn", "Name", "ShortName" },
                 values: new object[,]
                 {
-                    { new Guid("0b5682f0-8a72-47aa-88c3-7dcbc3dd53c1"), new DateTime(2023, 12, 18, 13, 43, 16, 594, DateTimeKind.Utc).AddTicks(1454), "ZZZ", "Cayman Island", "CI" },
-                    { new Guid("1228d541-26e2-4b10-9560-29a9c92532b1"), new DateTime(2023, 12, 18, 13, 43, 16, 594, DateTimeKind.Utc).AddTicks(1452), "ZZZ", "Bahamas", "BS" },
-                    { new Guid("68a16966-4bd7-4d69-8d6f-3464910a829f"), new DateTime(2023, 12, 18, 13, 43, 16, 594, DateTimeKind.Utc).AddTicks(1450), "ZZZ", "Jamaica", "JM" }
+                    { new Guid("0b5682f0-8a72-47aa-88c3-7dcbc3dd53c1"), "ZZZ", new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(7022), "ZZZ", new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(7022), "Cayman Island", "CI" },
+                    { new Guid("1228d541-26e2-4b10-9560-29a9c92532b1"), "ZZZ", new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(7020), "ZZZ", new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(7020), "Bahamas", "BS" },
+                    { new Guid("68a16966-4bd7-4d69-8d6f-3464910a829f"), "ZZZ", new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(7017), "ZZZ", new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(7017), "Jamaica", "JM" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Hotel",
-                columns: new[] { "Id", "AdditionalInfo", "Address", "CountryId", "LastChanged", "LastChangedBy", "Name", "Rating" },
-                values: new object[] { new Guid("fff56899-6925-4095-9da9-74a74d79c853"), null, "Negril", new Guid("0b5682f0-8a72-47aa-88c3-7dcbc3dd53c1"), new DateTime(2023, 12, 18, 13, 43, 16, 594, DateTimeKind.Utc).AddTicks(1532), "ZZZ", "Sandals Resort and Spa", 4.2999999999999998 });
+                columns: new[] { "Id", "AdditionalInfo", "Address", "CountryId", "CreatedBy", "CreatedOn", "LastChangedBy", "LastChangedOn", "Name", "Rating" },
+                values: new object[] { new Guid("fff56899-6925-4095-9da9-74a74d79c853"), null, "Negril", new Guid("0b5682f0-8a72-47aa-88c3-7dcbc3dd53c1"), "ZZZ", new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(7088), "ZZZ", new DateTime(2023, 12, 18, 20, 9, 49, 570, DateTimeKind.Utc).AddTicks(7087), "Sandals Resort and Spa", 4.2999999999999998 });
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",

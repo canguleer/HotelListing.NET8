@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelListing.API.Data.Migrations
 {
     [DbContext(typeof(HotelListingDbContext))]
-    [Migration("20231218134317_Initial")]
-    partial class Initial
+    [Migration("20231218201818_nullableTrachChange")]
+    partial class nullableTrachChange
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,14 +32,19 @@ namespace HotelListing.API.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("(newid())");
 
-                    b.Property<DateTime>("LastChanged")
-                        .HasColumnType("datetime");
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastChangedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastChangedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -61,24 +66,30 @@ namespace HotelListing.API.Data.Migrations
                         new
                         {
                             Id = new Guid("68a16966-4bd7-4d69-8d6f-3464910a829f"),
-                            LastChanged = new DateTime(2023, 12, 18, 13, 43, 16, 594, DateTimeKind.Utc).AddTicks(1450),
+                            CreatedBy = "ZZZ",
+                            CreatedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2782),
                             LastChangedBy = "ZZZ",
+                            LastChangedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2782),
                             Name = "Jamaica",
                             ShortName = "JM"
                         },
                         new
                         {
                             Id = new Guid("1228d541-26e2-4b10-9560-29a9c92532b1"),
-                            LastChanged = new DateTime(2023, 12, 18, 13, 43, 16, 594, DateTimeKind.Utc).AddTicks(1452),
+                            CreatedBy = "ZZZ",
+                            CreatedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2785),
                             LastChangedBy = "ZZZ",
+                            LastChangedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2785),
                             Name = "Bahamas",
                             ShortName = "BS"
                         },
                         new
                         {
                             Id = new Guid("0b5682f0-8a72-47aa-88c3-7dcbc3dd53c1"),
-                            LastChanged = new DateTime(2023, 12, 18, 13, 43, 16, 594, DateTimeKind.Utc).AddTicks(1454),
+                            CreatedBy = "ZZZ",
+                            CreatedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2787),
                             LastChangedBy = "ZZZ",
+                            LastChangedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2787),
                             Name = "Cayman Island",
                             ShortName = "CI"
                         });
@@ -104,17 +115,22 @@ namespace HotelListing.API.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("(newid())");
 
-                    b.Property<DateTime>("LastChanged")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getutcdate())");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastChangedBy")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)")
                         .UseCollation("Latin1_General_CI_AS");
+
+                    b.Property<DateTime>("LastChangedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getutcdate())");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -137,8 +153,10 @@ namespace HotelListing.API.Data.Migrations
                             Id = new Guid("fff56899-6925-4095-9da9-74a74d79c853"),
                             Address = "Negril",
                             CountryId = new Guid("0b5682f0-8a72-47aa-88c3-7dcbc3dd53c1"),
-                            LastChanged = new DateTime(2023, 12, 18, 13, 43, 16, 594, DateTimeKind.Utc).AddTicks(1532),
+                            CreatedBy = "ZZZ",
+                            CreatedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2851),
                             LastChangedBy = "ZZZ",
+                            LastChangedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2850),
                             Name = "Sandals Resort and Spa",
                             Rating = 4.2999999999999998
                         });
@@ -154,18 +172,25 @@ namespace HotelListing.API.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("LastChanged")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastChangedBy")
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("LastChangedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
@@ -188,18 +213,22 @@ namespace HotelListing.API.Data.Migrations
                         new
                         {
                             Id = new Guid("158c3c5d-063b-4531-8553-6fc5e5a8c7c2"),
+                            CreatedBy = "ZZZ",
+                            CreatedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2635),
                             Description = "Indicates that the role is an admin of System",
-                            LastChanged = new DateTime(2023, 12, 18, 13, 43, 16, 594, DateTimeKind.Utc).AddTicks(1276),
                             LastChangedBy = "ZZZ",
+                            LastChangedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2632),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("2f13b959-78dc-47b4-b714-7ecbc862e0da"),
+                            CreatedBy = "ZZZ",
+                            CreatedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2639),
                             Description = "Indicates that the role is an user of System",
-                            LastChanged = new DateTime(2023, 12, 18, 13, 43, 16, 594, DateTimeKind.Utc).AddTicks(1280),
                             LastChangedBy = "ZZZ",
+                            LastChangedOn = new DateTime(2023, 12, 18, 20, 18, 17, 993, DateTimeKind.Utc).AddTicks(2638),
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -218,6 +247,13 @@ namespace HotelListing.API.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -230,14 +266,14 @@ namespace HotelListing.API.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("LastChanged")
-                        .HasColumnType("datetime");
-
                     b.Property<string>("LastChangedBy")
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("LastChangedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
                         .IsRequired()
