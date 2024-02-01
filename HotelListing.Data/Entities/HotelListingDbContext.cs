@@ -12,7 +12,7 @@ namespace HotelListing.API.Data.Entities
         IdentityUserClaim<Guid>, IdentityUserRole<Guid>, IdentityUserLogin<Guid>,
         IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
     {
-
+         
         private readonly IHttpContextAccessor _contextAccessor;
         public HotelListingDbContext(DbContextOptions<HotelListingDbContext> options, IHttpContextAccessor contextAccessor) : base(options)
         {
